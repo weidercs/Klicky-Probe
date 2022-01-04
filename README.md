@@ -77,7 +77,7 @@ Probe BOM:
 
 [Voron Trident](./Printers/Voron/Trident)
 
-[Tiny-M (v0 2020 derivative)](./Printers/Tiny-M)
+[Tiny-M (v0 w/2020 extrusions derivative)](./Printers/Tiny-M)
 
 [Voron v0](./Printers/Voron/v0)
 

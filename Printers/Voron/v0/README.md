@@ -1,8 +1,23 @@
-# Klicky Probe for [VoronDesign](https://vorondesign.com/) printers
+# Klicky Probe for  Vorondesign v0,v0.1 printers
+
+Here you will find the necessary files and documentation to print and setup your own klicky probe on the v0 (and v0.1)
+
+This directory has the specific klipper macros (and a link to RRF scripts), STL files properly oriented for printing and community mods for the respective printer.
+
+You can find more information about the Voron printers at the [website](https://vorondesign.com/) or go check the [discord](https://discord.gg/voron), for the record, i own one, a v2.4, this is how i would describe them "A Voron is a fast high quality printer, i print with much better quality  the perimeters at the draft speed of my old bedslinger. It also has a  big community with lots of documentation and new ideas."
+
+Above all, have fun and be excellent to one another, now to the instructions.
 
 <img src="Photos/Voron_Klicky_Probe.JPG" alt="V2.4 Klicky Probe" style="zoom:80%;" />
 
+**Table of contents**
+
+[TOC]
+
+
+
 ## Mounting options for Voron V2.4, V1.8, Trident, Legacy
+
 The probe dock is mounted either to the frame or to the XY gantry, allowing it to be used as a Z endstop if desired as it's Z is fixed relative to the toolhead.
 
 There are several gantry extrusion mounts possible, all attached  between the A end B motors:
@@ -96,6 +111,19 @@ I will add more detail to this repository as we go along.
 |                         | Dock_mount_variable_pt3_v2.stl |                             |                             |                                |
 |                         |                                |                             |                             |                                |
 
+### Printing instructions
+
+Recommended printing settings:
+
+* initial layer height:0,24
+* layer height: 0.2mm
+* bottom/top/perimeters: 4
+* infill: more than 23%
+* infill type: Cubic
+* Thin walls: On
+
+It was tested and printed with ABS, might work on other materials, if you try, let me know how it worked out.
+
 ## Assembly
 
 ### Step 1 - Dock mount and Probe Dock assembly 
@@ -178,16 +206,10 @@ For the AB/SB Mount assembly you need the following parts
 - [ ] Multimeter to check for Continuity 
 - [ ] Super Glue
 
-
 The AB mount wires are also connected with pressure from the magnets, you can use the probe magnets as a template to insert the AB mount magnets, it is easier that way to don't insert the magnets the wrong way.
-<p float="left">
-  <img src="./Photos/AB_Mount_wiring_1.jpg" width="150" />
-  <img src="./Photos/AB_Mount_wiring_2.jpg" width="150" />
-  <img src="./Photos/AB_Mount_wiring_3.jpg" width="150" />
-  <img src="./Photos/AB_Mount_wiring_4.jpg" width="150" />
-  <img src="./Photos/AB_Mount_wiring_complete.jpg" width="150" /> 
-</p>
 
+| <img src="./Photos/AB_Mount_wiring_1.jpg" width="150" /> | <img src="./Photos/AB_Mount_wiring_2.jpg" width="150" /> | <img src="./Photos/AB_Mount_wiring_3.jpg" width="150" /> | <img src="./Photos/AB_Mount_wiring_4.jpg" width="150" /> | <img src="./Photos/AB_Mount_wiring_complete.jpg" width="150" /> |
+| :------------------------------------------------------: | :------------------------------------------------------: | :------------------------------------------------------: | :------------------------------------------------------: | :----------------------------------------------------------: |
 
 You will not lose Y travel on any configuration in the tests that were done.
 
@@ -280,27 +302,9 @@ If you want to use the Klicky Probe as your Z endstop, you need to change the `e
 
 
 ### Step 6: klipper  Dock/Undock Macro
-You will need to add macros to klipper to be able to dock and undock the probe as necessary to do the endstop (if necessary) and Quad Gantry Level, it is in the klipper Macro directory.
+As of right now, klipper has no inbuilt support for a removable probe, fortunately, it does support very robust macro programming, so you will need to add macros to klipper to be able to dock and attach the probe as necessary, as well as supporting the rest of klipper functions that require the usage of a probe.
 
-The macro is based on a version provided by the user garrettwp on Discord, many thanks to him.
-I have tweaked it a lot.
-It is also originally  based on the great Annex magnet dockable probe macros "#Originally developed by Mental, modified for better use on K-series printers by RyanG and Trails" and can be found [here](https://github.com/Annex-Engineering/Other_Printer_Mods/blob/61357d55bb1d52cb227baf62e49d07f83975562c/All_Printers/Quickdraw_-_Magnetic_Microswitch_Z_Probe/Klipper_Macros/dockable_probe_macros.cfg)
-
-Would also like to thank the Voron discord community and VoronDesign for all the work that was and still is being made to maintain the Voron ecosystem.
-
-Right now the macros are divided in multiple files, that way it is much easier to upgrade, configure and maintain
-
-* klicky-probe.cfg (includes all the necessary files in klipper)
-
-* *-klick-variables.cfg, stores all the Klicky variables, printer specific, should not be necessary to update very often
-
-* *-klicky-bed-mesh-calibrate.cfg, bed mesh helper scripts, assumes bed mesh is already configured, includes a commented example, further help on setup [here](https://www.klipper3d.org/Bed_Mesh.html#bed-mesh)
-
-* V2-klicky-quad-gantry-levelling.cfg, Quad Gantry Level helper script, assumes QGL is already configured (it's used on a V2.4 to level the gantry relative to the bed), further help [here](https://www.klipper3d.org/Config_Reference.html?h=quad#quad_gantry_level)
-
-* [V1.8/Legacy]-klicky-screws-tilt-adjust.cfg, screws tilt adjust helper script, assumes that the configuration is already defined, further help on setup [here](https://www.klipper3d.org/Manual_Level.html#adjusting-bed-leveling-screws-using-the-bed-probe)
-
-* [V1.8/Trident/Legacy]-klicky-z-tilt-adjust.cfg, Z tilt adjust helper script, assumes that the configuration is already defined, further help on setup [here](https://www.klipper3d.org/Config_Reference.html?h=z_tilt#z_tilt)
+They are located on the Macro directory, you need to **check that before continuing on the build**.
 
 #### Use Klicky Probe with/without Z endstop switch (Voron)
 
@@ -317,14 +321,6 @@ If you want to use your Klicky Probe as a Z endstop, then you need to set the tw
 variable_z_endstop_x:     0
 variable_z_endstop_y:     0
 ```
-
-#### klipper Configuration and Probe offset
-
-Download the appropriate files and upload it to your klipper Config folder.
-
-Then open your printer.cfg file and add the following line before the "Macros" Section.
-
-`[include Klicky-Probe.cfg]`
 
 #### Adjust Probe Pickup Position
 
@@ -370,6 +366,21 @@ I recommend doing all the tests with no PEI sheet and with a cool toolhead and b
 Congratulations, your done :).
 
 ***WARNING when you are doing PROBE_ACCURACY, make sure that the probe is above the bed, the PROBE_ACCURACY macro does not move the toolhead in X or Y.***
+
+
+
+## Firsts tests
+
+Before starting to test klicky, and from past mistakes, please remove your PEI sheet (the probe works on the magnetic sheet) and if possible, change your printer maximum speed, acceleration and Z current, on klipper with TMC steppers, you can do this:
+
+```python
+SET_TMC_CURRENT STEPPER=stepper_z CURRENT=0.6 
+SET_TMC_CURRENT STEPPER=stepper_z1 CURRENT=0.6 
+SET_TMC_CURRENT STEPPER=stepper_z2 CURRENT=0.6 
+SET_TMC_CURRENT STEPPER=stepper_z3 CURRENT=0.6 
+SET_VELOCITY_LIMIT ACCEL=1000
+SET_VELOCITY_LIMIT VELOCITY=100
+```
 
 Enjoy your Klicky Probe!
 
