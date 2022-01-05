@@ -5,9 +5,8 @@ Initially it was focused on the [Voron printers](https://vorondesign.com/) (V2.4
 
 The objectives for this project are:
 - drop in replacement for Omron TL-Q5MC2 or PL-08N2 (you don't need to replace the toolhead), replacement of BLtouch probes
-- easier and faster to build than similar probe types
-  - does not require soldering
-  - fixed probe dock mount (for the printers that are suported), less variables to adjust
+- soldering not required
+- minimal adjustments required
 - be able to detect all the print surfaces
 - be as close to the hotend tip as possible
 - highly repeatable and accurate probes
@@ -36,7 +35,16 @@ If you want to donate something regarding this project, use this [link](https://
 
 klicky early version.
 
-# Probe Accuracy
+# Klicky components
+
+All the compatible printers require:
+
+* Toolhead mount (the thing that the probe attached to when it's being used)
+* Klicky probe (there are three versions, all are interchangeable and compatible, more information on the specific printer page), what actually is used to probe the bed
+* Probe dock (all the printers use the same)
+* Probe dock mount (what attaches to the printer to dock the probe when not in use)
+
+# Probe accuracy
 
 The probe accuracy output is better than a range of 0.025mm (difference between highest and lowest), and a standard deviation of 0.01mm.
 

@@ -16,7 +16,7 @@ Above all, have fun and be excellent to one another, now to the instructions.
 
 
 
-## Mounting options for Voron V2.4, V1.8, Trident, Legacy
+## Mounting options
 
 The probe dock is mounted either to the frame or to the XY gantry, allowing it to be used as a Z endstop if desired as it's Z is fixed relative to the toolhead.
 
@@ -42,13 +42,13 @@ This mod is also on [VoronUsers repository](https://github.com/VoronDesign/Voron
 - Super Glue (optional)
 - Soldering Iron for the heat inserts
 
-### Probe BOM:
+### Probe:
 
 - 1x microswitch (the omron D2F-5 or D2F-5L (removing the lever is required), other also work with reduced accuracy or repeatability (mostly anecdotal evidence, needs a proper sudy)
 - 2x M2x10 mm self tapping
 - 4x 6 mm x 3 mm magnets (N35 magnets work)
 
-### AB/SB mount BOM:
+### AB/SB mount:
 
 - 3x 6 mm x 3 mm magnets (N35 magnets work)
 - 2x M3x8 mm SHC Screws
@@ -57,7 +57,7 @@ This mod is also on [VoronUsers repository](https://github.com/VoronDesign/Voron
 ### Probe dock:
 
 - 1x 6 mm x 3 mm magnets (N35 magnets work)
-- 2x M3x20 mm
+- 2x M3x16 mm
 
 ### Probe dock mounts:
 
@@ -70,13 +70,11 @@ This mod is also on [VoronUsers repository](https://github.com/VoronDesign/Voron
 
 
 
-I will add more detail to this repository as we go along.
-
 ## What to print
 
 ### Probe 
 
-* 2x KlickyProbe_Probe_v2.stl (keeping a spare is always a good idea)
+* 2x KlickyProbe_v2.stl (keeping a spare is always a good idea)
 
 #### Helpers to pressfit the probe magnet
 
