@@ -18,12 +18,6 @@ This mod is not yet on [VoronUsers repository](https://github.com/VoronDesign/Vo
 
 <img src="Photos/Klicky_v0_family.JPG" alt="V2.4 Klicky Probe" style="zoom:80%;" />
 
-**Table of contents**
-
-[TOC]
-
-
-
 ## Mounting options
 
 ### Probe dock mount
@@ -38,7 +32,7 @@ It can be frustrating on the v0 to add extra m3 nuts on the 1515 extrusion after
 
 |                      Screwless variable                      |                            Fixed                             |                       Fixed extrabeef                        |                         Top screws                          |                         Side screws                          |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :---------------------------------------------------------: | :----------------------------------------------------------: |
-|    <img src="Photos/Dockmount_variable.jpg" width="300">     |      <img src="Photos/Dockmount_fixed.jpg" width="300">      |    <img src="Photos/Dockmount_extrabeef.jpg" width="200">    |   <img src="Photos/Dockmount_topscrews.jpg" width="500">    |   <img src="Photos/Dockmount_sidescrews.jpg" width="400">    |
+|    <img src="Photos/Dockmount_variable.jpg" width="200">     |      <img src="Photos/Dockmount_fixed.jpg" width="300">      |    <img src="Photos/Dockmount_extrabeef.jpg" width="200">    |   <img src="Photos/Dockmount_topscrews.jpg" width="500">    |   <img src="Photos/Dockmount_sidescrews.jpg" width="400">    |
 | recommended for most setups, does not require extra m3 nuts on the extrusion (v0.0/1) | fixed position, does not require extra m3 nuts on the extrusion (v0.1) | fixed, fits X carriages that are 2mm thicker, does not require extra m3 nuts on the extrusion(v0.1) | fixed, requires 2 extra m3 nuts on the top extrusion (v0.1) | fixed, requires 2 extra m3 nuts on the front extrusion (v0.1) |
 
 ### Probe toolhead mount
@@ -271,7 +265,7 @@ again, before placing the wire magnets, use some super glue on the holes (not a 
 
 The 3rd magnets (there are two) should have the inverse polarity, exacly like on the probe.
 
-Wait until the system is complete and assembled before gluing the magnets, they might need adjustment to ensure a good fit on the probe.
+Wait until the system is complete and assembled before gluing the 3rd magnets, they might need adjustment to ensure a good fit on the probe.
 
 | <img src="./Photos/V0.1_probe_mount_1.jpg" style="zoom: 15%;" /> | <img src="./Photos/V0.1_probe_mount_2.jpg" style="zoom:15%;" /> | <img src="./Photos/V0.1_probe_mount_3.jpg" style="zoom:15%;" /> |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | ------------------------------------------------------------ |
@@ -296,7 +290,7 @@ Connect a female terminal to the wires that will run in the umbilical from the t
 
 <img src="./Photos/V0.1_umbilical.jpg" width="600px;" />
 
-Connect the wires from the Klicky Probe to the Zprobe port, on GND and PC14 bin (i reused the LDO kit connector)
+Connect the wires from the Klicky Probe to the Zprobe port, on GND and PC14 bin (I reused the LDO kit connector)
 
 | <img src="./Photos/V0.1_back.jpg" width="600px;" /> | ![v0_eletronic](./Photos/v0_eletronic.JPG) |
 | --------------------------------------------------- | ------------------------------------------ |
@@ -307,134 +301,176 @@ When testing the docking and attachment of the probe, make sure that the back ma
 
 ### Step 5: klipper configuration
 
-This example uses the default Voron V0.1 SKR mini E3 v2 configuration, with the probe connected to the PC14 pin, please update it to your specific configuration.
+Unfortunately, I do not know how to document RRF probe configuration, so here is only Klipper configurations.
+
+As of right now, klipper and RRF have no inbuilt support for a removable probe, fortunately, it does support very robust macro programming, so you will need to add macros to be able to dock and attach the probe as necessary, as well as supporting the rest of the functions that require the usage of a probe.
+
+The macros and instructions on how to configure are located on the [Macro directory](../../../Klipper_macros), you need to **check that before continuing on the build**, there are also some [RRF scripts](../../RRF_macros) that work for the Voron V2.4.
+
+For the Voron v0, these are the recommended configuration on the klicky-variables.cfg:
+
 ```python
-[probe]
-pin: PC14
-x_offset: 0
-y_offset: 19.75
-z_offset: 6.42
-speed: 7
-samples:3 
-samples_result: median
-sample_retract_dist: 2.0
-samples_tolerance: 0.01
-samples_tolerance_retries: 3
+variable_verbose:               True  # Enable verbose output
+variable_travel_speed:          100   # how fast all other travel moves will be performed when running these macros
+variable_dock_speed:            50    # how fast should the toolhead move when docking the probe for the final movement
+variable_release_speed:         55    # how fast should the toolhead move to release the hold of the magnets after docking
+variable_z_drop_speed:          20    # how fast the z will lower when moving to the z location to clear the probe
+    
+variable_safe_z:         	    25    # Minimum Z for attach/dock and homing functions
+# if true it will move the bed away from the nozzle when Z is not homed
+variable_enable_z_hop:        True    # True v0
+    
+#Dock move
+Variable_dockmove_x:             0    # Final toolhead movement to release
+Variable_dockmove_y:            40    # the probe on the dock
+Variable_dockmove_z:             0    # (can be negative)
+
+#Attach move
+Variable_attachmove_x:          30    # Final toolhead movement to Dock
+Variable_attachmove_y:           0    # the probe on the dock
+Variable_attachmove_z:           0    # (can be negative)
+    
+variable_max_bed_x:             120   # maximum Bed size avoids doing a probe_accuracy outside the bed
+variable_max_bed_y:             120   # maximum Bed size avoids doing a probe_accuracy outside the bed
+
 ```
 
-I recommend a probing speed between 5mm/s and 10mm/s, you may experiment to see what is the better speed for your machine.
+The sections below should be added to klicky-specific.cfg, that way, it will be loaded on klipper via a klicky-probe.cfg include.
 
-Also, make sure that the horizontal_move_z on the bed mesh and QGL is high enought that the probe will not hit the bed (needs to be at least 8mm)
+If you would like to use a bed mesh, this is the recommended settings:
 
 ```python
 [bed_mesh]
-horizontal_move_z: 10
+mesh_min: 15,15
+mesh_max: 105,105
+speed: 100
+horizontal_move_z: 20 
 
-[quad_gantry_level]
-horizontal_move_z: 10
+probe_count: 3,3					#if you would like more detail, use 5,5 here
+relative_reference_index: 4			 #if you use 5,5 above, place 12 here
+mmove_check_distance: 3
+
+algorithm: lagrange
+fade_start: 1
+fade_end: 10
+fade_target: 0
+split_delta_z: 0.0125
+mesh_pps: 2,2
 ```
 
-Please confirm that if you are using the probe input, that the pull-up is enable by using the ^ sign.
-Normally the endstop pind have a hardware solution.
+Regarding the Screws Tilt Adjust (Klipper probes the three screws positions and recommends the number of turns to level the bed), you can use this configuration:
 
+```python
+[screws_tilt_adjust]
+screw1: 105,115
+screw1_name: back right
+screw2: 0,115
+screw2_name: back left
+screw3: 50,5
+screw3_name: front screw
+horizontal_move_z: 20
+speed: 100
+screw_thread: CW-M3
+```
+
+This is probe configuration is with the default Voron v0.1 SKR mini E3 v2 configuration, with the probe connected to the PC14 pin, please update it to your specific configuration:
+
+```python
+[probe]
+#with Long Klicky Probe
+pin: ^PC14
+x_offset: 8 #(9.5 with front cowling)
+y_offset: 0
+z_offset: 14.5
+speed: 7
+lift_speed: 7
+
+samples: 3
+samples_result: median
+sample_retract_dist: 2
+
+samples_tolerance: 0.01
+samples_tolerance_retries: 10
+```
+
+I recommend a probing speed between 5mm/s and 10mm/s, you may experiment to see what is the better speed for your machine.
+Please confirm that if you are not using a endstop pin, that the pull-up is enable by using the ^ sign, normally the endstop pins have a hardware solution that does not require this configuration.
 Depending on your switch you may need to add a `!` to invert that pin (normally open vs. normally closed).
-
-Within the `[probe]` section also adjust your probe offset to the following values.
-
-You need to set the probe offset within your `printer.cfg`  
-
-There is now an arrow on the probe telling you where should the switch pole be to have the correct offset.
 
 
 #### Z endstop and Probe configuration
 
-If you want to use the Klicky Probe as your Z endstop, you need to change the `endstop_pin:` under the `[stepper_z]` section to `probe:z_virtual_endstop` . Just comment out the old one and add a new line `endstop_pin: probe:z_virtual_endstop`. 
+If you want to use the Klicky Probe as your Z endstop, you need to change the `endstop_pin:` under the `[stepper_z]` section to `probe:z_virtual_endstop`.
 
-#### Assembled Klicky Probe
+Just comment out the old one and add a new line `endstop_pin: probe:z_virtual_endstop`.
 
-![Assembled Klicky Probe](./Photos/Voron_V2.4_300mm_back.jpg)
-
-
-
-### Step 6: klipper  Dock/Undock Macro
-As of right now, klipper has no inbuilt support for a removable probe, fortunately, it does support very robust macro programming, so you will need to add macros to klipper to be able to dock and attach the probe as necessary, as well as supporting the rest of klipper functions that require the usage of a probe.
-
-They are located on the Macro directory, you need to **check that before continuing on the build**.
-
-#### Use Klicky Probe with/without Z endstop switch (Voron)
-
-If you want to use the Z endstop switch of the Voron you also need to set the following two lines, this is the Z endstop Location from your `printer.cfg`.
-
-```python
-variable_z_endstop_x:
-variable_z_endstop_y:
-```
-
-If you want to use your Klicky Probe as a Z endstop, then you need to set the two lines to, `0`.
+You will need to update the Z probing variables,  set the two variables below to `0`, it will probe the middle of the bed.
 
 ```python
 variable_z_endstop_x:     0
-variable_z_endstop_y:     0
+variable_z_endstop_y:     0 
 ```
 
-#### Adjust Probe Pickup Position
+#### Assembled Klicky Probe
 
-One of the last things we need to do is to adjust the probe pickup position.
+![Assembled Klicky Probe](./Photos/V0.1_complete.jpg)
 
-For this we need to make sure that the gantry is [deracked](https://www.youtube.com/watch?v=cOn6u9kXvy0), the x and y axis are homed and the probe is manually attached to the toolhead mount.
 
-Now manually (with gcode commands) move the toolhead to the probe dock and move it so far to the back that the probe docks, note the Y-Position.
-Next, again manually, move the toolhead left and right until the probe it is perfectly aligned with the mount, note the X.Position.
 
-Open your `Klicky-Probe.cfg` and find the `#dock location` section and edit the following two line
-
-```python
-variable_docklocation_x:
-variable_docklocation_y:
-```
-
-If you have your Dock mounted to the bed then you need to adjust the `variable_docklocation_z:` too.
-
-#### Hall sensors as Y endstop
+### Step 6: klipper  Dock/Undock  configuration
+#### Y max position adjustment
 
 If you are using a hall sensor as endstop, you need to make sure that on your Y maximum, the gantry is almost hitting the AB motor mounts, you can have a Y position maximum "behind" the Y endstop position, like this:
+
 ```python
 [stepper_y]
 position_endstop: 303
 position_max: 305
 ```
 
-#### Automatic Z Calibration
+Even in the stock Y endstop with a lever, you normally can add a extra mm of Y travel due to the lever extra trigger distance:
 
-If you want to use the Z endstop switch of the Voron to calculate the Z-Offset, use the new [automatic Z calibration](https://github.com/protoloft/klipper_z_calibration).
-Besides the macros from this repository, you will need to install the Z autocalibration plugin, the recommended way is via [moonraker](https://github.com/protoloft/klipper_z_calibration#moonraker-updater).
+```python
+[stepper_y]
+position_endstop: 303
+position_max: 304
+```
 
-Regarding the configuration and necessary macros, most of necessary macros are already included in the klick-probe.cfg, what is missing is the specific z_calibration configuration and the macro that is called to do the actual calibration.
-All of this is included in the [Klicky automatic Z calibration configuration](Klipper_macro/z_calibration.cfg)
+#### Adjust Probe Pickup Position
 
-You should then add a call to CALIBRATE_Z at the end of your PRINTER_START (before any purge line).
+One of the last things we need to do is to adjust the probe pickup position.
 
-If you do not have a [bed mesh] section, klipper will give an error, you need to enable the [bed_mesh] section.
+Make sure that the x and y axis are homed and the probe is manually attached to mount.
 
-I recommend doing all the tests with no PEI sheet and with a cool toolhead and bed.
+Now manually (with gcode commands) move the toolhead to the probe dock and move it so far to the back that the probe docks, note the Y-Position.
 
-Congratulations, your done :).
+Next, again manually, move the toolhead parallel to the probe dock until the probe it is perfectly aligned with the mount, note the X.Position.
+
+Open your `klicky-variables.cfg` and find the `#dock location` section and edit the following two line
+
+```python
+variable_docklocation_x:
+variable_docklocation_y:
+```
+
+Test now with the ATTACH_PROBE and DOCK_PROBE if it docks and is removed correctly, some common points that can give problems are:
+
+* the dock magnet is touching the back probe magnet, they cannot touch, push them further in
+* the probe is hitting the dock arms, please move the toolhead more to the side where the probe does not hit, by 1mm at a time, until it works
+* the probe is falling after being release, the dock is too far away, you can insert one or several 1mm spacer to move the dock and solve this
 
 ***WARNING when you are doing PROBE_ACCURACY, make sure that the probe is above the bed, the PROBE_ACCURACY macro does not move the toolhead in X or Y.***
 
-
+Congratulations, your done :).
 
 ## Firsts tests
 
 Before starting to test klicky, and from past mistakes, please remove your PEI sheet (the probe works on the magnetic sheet) and if possible, change your printer maximum speed, acceleration and Z current, on klipper with TMC steppers, you can do this:
 
 ```python
-SET_TMC_CURRENT STEPPER=stepper_z CURRENT=0.6 
-SET_TMC_CURRENT STEPPER=stepper_z1 CURRENT=0.6 
-SET_TMC_CURRENT STEPPER=stepper_z2 CURRENT=0.6 
-SET_TMC_CURRENT STEPPER=stepper_z3 CURRENT=0.6 
+SET_TMC_CURRENT STEPPER=stepper_z CURRENT=0.2 
 SET_VELOCITY_LIMIT ACCEL=1000
-SET_VELOCITY_LIMIT VELOCITY=100
+SET_VELOCITY_LIMIT VELOCITY=50
 ```
 
 Enjoy your Klicky Probe!
