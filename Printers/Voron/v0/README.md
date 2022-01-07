@@ -16,7 +16,7 @@ Above all, have fun and be excellent to one another, now to the instructions.
 
 This mod is not yet on [VoronUsers repository](https://github.com/VoronDesign/VoronUsers/tree/master/printer_mods/JosAr/Klicky-Probe, should be soon. 
 
-<img src="Photos/Klicky_v0_family.JPG" alt="V2.4 Klicky Probe" style="zoom:80%;" />
+<img src="Photos/Klicky_v0_family.jpg" alt="V2.4 Klicky Probe" style="zoom:80%;" />
 
 ## Mounting options
 
@@ -479,7 +479,7 @@ Enjoy your Klicky Probe!
 
 ## Dock and undock video
 
-https://user-images.githubusercontent.com/16675722/122302371-eb9c4e00-cef9-11eb-91d3-3aded131bae0.mp4
+https://youtu.be/qqRuQJcBS7o
 
 It is working very well, if you decide to use it, give me feedback, either here, or on discord, my discord user is JosAr#0517.
 

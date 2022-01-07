@@ -1,7 +1,7 @@
 # Klicky Probe
 Microswitch probe with magnetic attachment, primarily aimed at CoreXY 3d printers.
 
-Initially it was focused on the [Voron printers](https://vorondesign.com/) (V2.4, V1.8, Trident, V0) and derivatives (Tiny-M, Micron, etc), now there is also versions working on the [Ratrig Vcore-3](https://v-core.ratrig.com/)
+Initially it was focused on the [Voron printers](https://vorondesign.com/) (V2.4, V1.8, Trident, V0) and derivatives (Tiny-M, Micron, etc), there is also a development version for the Ratrig Vcore-3
 
 The objectives for this project are:
 - drop in replacement for Omron TL-Q5MC2 or PL-08N2 (you don't need to replace the toolhead), replacement of BLtouch probes
@@ -31,9 +31,7 @@ Without them, and some others this effort would not be in the current state, man
 
 If you want to donate something regarding this project, use this [link](https://paypal.me/Josar154) or [__Buy me some ABS!__](https://www.buymeacoffee.com/JosAr), thanks
 
-![Klicky Probe image](Photos/Klicky_Probe.png)
-
-klicky early version.
+![Klicky Probe image](Photos/Klicky_Probe.png)klicky early version.
 
 # Klicky components
 
@@ -44,13 +42,23 @@ All the compatible printers require:
 * Probe dock (all the printers use the same)
 * Probe dock mount (what attaches to the printer to dock the probe when not in use)
 
-# Probe accuracy
+The CAD with all the files is located [Here](./CAD)
+
+Common Klicky STL's (parts that are common to all the printers)  are located [here](./Base_STL).
+Printer specific STL are in each printer directory.
+
+The klipper macros are [here](./Klipper_macros), the RRF [here](./RRF_macros).
+
+
+## Probe accuracy
 
 The probe accuracy output is better than a range of 0.025mm (difference between highest and lowest), and a standard deviation of 0.01mm.
 
-# Print Settings
 
-There are no need for supports, recommended settings are 4 perimeters/top/bottom, at least 13% infill, the STL's are already oriented, you only need to send them to the slicer.
+
+## Print Settings
+
+There are no need for supports, recommended settings are 4 perimeters/top/bottom, at least 23% infill, the STL's are already oriented, you only need to send them to the slicer.
 
 ![](./Photos/Klicky_Probe_recommended_printing_orientation.png)
 
@@ -77,19 +85,19 @@ Probe BOM:
 
 # Printers Supported (by support order)
 
-[Voron v2.4](./Printers/Voron/v2.4)
+[Voron v2.4](./Printers/Voron/v1.8_v2.4_Legacy_Trident)
 
-[Voron v1.8](./Printers/Voron/v1.8)
+[Voron v1.8](./Printers/Voron/v1.8_v2.4_Legacy_Trident)
 
-[Voron Legacy](./Printers/Voron/Legacy)
+[Voron Legacy](./Printers/Voron/v1.8_v2.4_Legacy_Trident)
 
-[Voron Trident](./Printers/Voron/Trident)
+[Voron Trident](./Printers/Voron/v1.8_v2.4_Legacy_Trident)
 
 [Tiny-M (v0 w/2020 extrusions derivative)](./Printers/Tiny-M)
 
 [Voron v0](./Printers/Voron/v0)
 
-[Ratrig v-core-3](./Printers/Voron/Ratrig/Vcore-3)
+[Ratrig v-core-3](./Printers/Ratrig/Ratrig/Vcore-3)
 
 # Assembled Klicky Probe on a Voron v2.4
 

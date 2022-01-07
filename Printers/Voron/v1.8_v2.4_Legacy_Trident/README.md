@@ -8,7 +8,7 @@ You can find more information about the Voron printers at the [website](https://
 
 Above all, have fun and be excellent to one another, now to the instructions.
 
-<img src="Photos/Voron_Klicky_Probe.JPG" alt="V2.4 Klicky Probe" style="zoom:80%;" />
+<img src="Photos/Voron_Klicky_Probe.jpg" alt="V2.4 Klicky Probe" style="zoom:80%;" />
 
 
 
