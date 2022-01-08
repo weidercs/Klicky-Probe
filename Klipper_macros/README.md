@@ -30,6 +30,7 @@ Right now the macros are divided in multiple files, that way it is much easier t
 * Klicky-quad-gantry-level.cfg, Quad Gantry Level helper script, allows on machines with four Z independent motors to level the bed automatically, assumes QGL is already configured (it's used on a V2.4 to level the gantry relative to the bed), further help [here](https://www.klipper3d.org/Config_Reference.html?h=quad#quad_gantry_level)
 * Klicky-screws-tilt-calculate.cfg, screws tilt adjust helper script, knowing where the bed screws are, it will assist in leveling the bed by calculating on the number of times each screw should be rotated, assumes that the configuration is already defined, further help on setup [here](https://www.klipper3d.org/Manual_Level.html#adjusting-bed-leveling-screws-using-the-bed-probe)
 * klicky-z-tilt-adjust.cfg, Z tilt adjust helper script, allows on machines with two or three Z independent motors to level the bed automatically, assumes that the configuration is already defined, further help on setup [here](https://www.klipper3d.org/Config_Reference.html?h=z_tilt#z_tilt)
+* klicky-specific.cfg, place to put other configurations specific to your printer, like probe or bed mesh klipper configuration
 
 Some printers, like the Voron v0 or Tiny-M don't have the probe as a standard configuration, so in those printers documentation there are extra klipper configurations that you need to use in order to configure the actual probe.
 
