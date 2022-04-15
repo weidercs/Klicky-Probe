@@ -40,3 +40,12 @@ Designed for V1.8
 "The 2.4 Dock and Variable Dock take up quite a lot of space which could be better used for nozzle scrubbing etc.
 I've created an alternative Dock, that attaches to the rear left vertical profile."
 It's compatible with the Klicky v2 dock
+
+[## Dock mount fixed S](./Fiction/) by Fiction
+
+"A dock mount that can be positioned closer to the end of the V2 or Trident rear gantry extrusion to avoid the nozzle brush, without using a side mount. It also puts the dock 2.5mm forward (i.e. in the negative y direction) which was necessary for my setup."
+
+[## Retractable Probe Dock](https://github.com/tronfu/Voron-Mods/tree/main/Retractable_Probe_Dock) by Tron Fu
+
+A Servo-powered Retractable Dock for Klicky Probe and Nozzle Brush.
+

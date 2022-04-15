@@ -1,6 +1,7 @@
 # Klicky Probe for  Vorondesign V1.8,V2.4, Legacy and Trident printers
 
 Here you will find the necessary files and documentation to print and setup your own klicky probe.
+Don't forget to download all [the necessary parts](https://github.com/jlas1/Klicky-Probe/tree/main/Printers/Voron/v1.8_v2.4_Legacy_Trident#parts-location).
 
 This directory has the specific klipper macros (and a link to RRF scripts), STL files properly oriented for printing and community mods for the respective printer.
 
@@ -65,6 +66,12 @@ This mod is also on [VoronUsers repository](https://github.com/VoronDesign/Voron
 | 2x M5x10 mm                        | 2x M5x10 mm                         | 2x M5x10 mm                        | 2x M5x10 mm                        | 2x M5x10 mm                        |
 | 2x M5 t-nut or equivalent          | 2x M5 t-nut or equivalent           | 2x M5 t-nut or equivalent          | 2x M5 t-nut or equivalent          | 2x M5 t-nut or equivalent          |
 |                                    | 8x M3x8 mm                          | 2x M3x8 mm                         | 2x M3x8 mm                         |                                    |
+
+## Sourcing
+
+To get the best experience, please consider purchasing from the trusted list of suppliers bellow.
+
+[trusted suppliers list](./Sourcing.md)
 
 ## Parts location
 
@@ -272,7 +279,7 @@ variable_z_drop_speed:          20    # how fast the z will lower when moving to
     
 variable_safe_z:         	    25    # Minimum Z for attach/dock and homing functions
 # if true it will move the bed away from the nozzle when Z is not homed
-variable_enable_z_hop:          CHECK_COMMENT  # True on the v2.4, false on v1.8, Trident and Legacy
+variable_enable_z_hop:          CHECK_COMMENT  # True on the v2.4, False on v1.8, Trident and Legacy
     
 #Dock move (the final movement required to reach the dock and avoid the arms with the probe attached)
 Variable_dockmove_x:                40    # Final toolhead movement to release
@@ -294,7 +301,7 @@ pin: ^P0.10
 x_offset: 0
 y_offset: 19.75
 z_offset: 6.42
-speed: 7
+speed: 5
 samples:3 
 samples_result: median
 sample_retract_dist: 2.0
@@ -312,26 +319,16 @@ horizontal_move_z: 10
 horizontal_move_z: 10
 ```
 
-I recommend a probing speed between 5mm/s and 10mm/s, you may experiment to see what is the better speed for your machine.
+I recommend a probing speed between 3mm/s and 10mm/s, you may experiment to see what is the better speed for your machine.
 Please confirm that if you are using the probe input, that the pull-up is enable by using the ^ sign, normally the endstop pins have a hardware solution that does not require this configuration.
 Depending on your switch you may need to add a `!` to invert that pin (normally open vs. normally closed).
 Normally the endstop pins use a hardware solution, so it is not necessary.
 
 There is now an arrow on the probe telling you where should the switch pole be to have the correct offset.
 
-#### Z endstop and Probe configuration
+#### Z endstop and Probe configuration (virtual Z endstop)
 
-If you want to use the Klicky Probe as your Z endstop, you need to change the `endstop_pin:` under the `[stepper_z]` section to `probe:z_virtual_endstop`.
-
-Just comment out the old one and add a new line `endstop_pin: probe:z_virtual_endstop` and comment out position_endstop.
-
-You will need to update the klicky-variables.cfg Z probing variables,  set the two variables below to `0`, it will probe the middle of the bed.
-
-```python
-variable_z_endstop_x:     0
-variable_z_endstop_y:     0
-```
-You also need to comment position_endstop
+If you want to use the Klicky Probe as your Z endstop, please read this [excellent documentation](https://github.com/T4KUUY4/Voron-Stuff/tree/main/KlickyProbeZoffset) by Takuya and Clee.
 
 #### Assembled Klicky Probe
 
@@ -382,11 +379,11 @@ Your variable_docklocation_x is 17
 ```
 
 Now manually (with gcode commands) move the toolhead to the  Xvariable_docklocation_x Y(max-40) position.
-In the example above, it would be "G0 X17 Y365".
+In the example above, it would be "G0 X17 Y265".
 
 The probe and dock magnet can be 1/2 mm away from each other, that is ok, they will attact when the probe is released from the mount.
 
-Now move the toolhead 40m to the side and check if the probe is docked securely.
+Now move the toolhead 40mm to the side and check if the probe is docked securely.
 If it does, perfect, variable_docklocation_y is your Ymax, if not, you need to either increase the Ymax or add a dock extender and repeat the process.
 
 Open your `klicky-variables.cfg` and find the `#dock location` section and edit the following two line
@@ -408,23 +405,12 @@ If you have your Dock mounted to the bed then you need to adjust the `variable_d
 
 ***This requires manual klipper plug-in configuration and installation, it is recommended to be familiar with klipper before attempting this***
 
-If you want to use the Z endstop switch of the Voron to calculate the Z-Offset, use the new [automatic Z calibration](https://github.com/protoloft/klipper_z_calibration).
+If you want to use the Z endstop switch of the Voron to calculate the Z-Offset, use the [automatic Z calibration](https://github.com/protoloft/klipper_z_calibration).
 Besides the macros from this repository, you will need to install the Z autocalibration plugin, the recommended way is via [moonraker](https://github.com/protoloft/klipper_z_calibration#moonraker-updater).
 
 Sometimes after installation it's necessary to run the install script manually, if you installed using the moonraker mothod above, run "/home/pi/klipper_z_calibration/install.sh" on the raspberry pi command prompt.
-Regarding the configuration and necessary macros, most of necessary macros are already included in the klick-probe.cfg, what is missing is the specific z_calibration configuration and the macro that is called to do the actual calibration.
 
 **[I would advise you to read the detailed explanation of the plugin functionality if you want to start using it](https://github.com/protoloft/klipper_z_calibration#how-to-configure-it)**
-
-All of this is included in the [Klicky automatic Z calibration configuration](../../..Klipper_macro/klicky-z_calibration.cfg)
-
-You should then add these lines at the end of your PRINTER_START (before any purge line):
-```python
-G28 Z
-SET_GCODE_OFFSET Z=0
-CALIBRATE_Z
-```
-To fine tune the nozzle distance to the bed, [use this](https://github.com/protoloft/klipper_z_calibration#switch-offset).
 
 #### Probe_accuracy and Probe_calibrate
 
