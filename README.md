@@ -42,7 +42,7 @@ If you want to donate something regarding this project, use this [link](https://
 
 If you are upgrading from an earlier version, check the [klipper macros](./Klipper_macros) folder, it contains update instructions.
 
-# Printers Supported (by support order)
+# Printers With detailed instructions and specific parts (by support order)
 
 The specific parts with install, configuration, troubleshoot and recommended settings can be found on each printer page, linked below.
 
@@ -55,6 +55,11 @@ The specific parts with install, configuration, troubleshoot and recommended set
 [Voron Trident](./Printers/Voron/v1.8_v2.4_Legacy_Trident)
 
 [Voron v0](./Printers/Voron/v0)
+
+[VCore-3](./Printers/Ratrig/VCore3)
+
+[MercuryOne](./Printers/ZeroG/Mercury_One)
+
 
 There are also [docks and mounts submitted by users](./Usermods) to support other printers and toolheads, you should check it out.
 
@@ -109,6 +114,12 @@ Probe BOM:
 - some m3 screws
 - some m3 heat inserts
 - some m3 nuts
+
+# Sourcing guide
+
+To get the best experience, please consider purchasing from the trusted list of suppliers bellow.
+
+[trusted suppliers list](./Sourcing.md)
 
 # Assembled Klicky Probe on a Voron v2.4
 

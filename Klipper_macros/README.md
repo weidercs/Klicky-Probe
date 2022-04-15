@@ -39,14 +39,14 @@ The helper files work by expanding the standard klipper function with a attach a
 
 Right now the macros are divided in multiple files, that way it is much easier to upgrade, configure and maintain
 
-| File                             |        v2.4        |        v1.8        |       Legacy       |      Trident       |         v0         |       Tiny-M       |      V-core3       |
-| -------------------------------- | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: |
-| klicky-probe.cfg                 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| klick-variables.cfg              | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| klicky-bed-mesh-calibrate.cfg    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| Klicky-quad-gantry-level.cfg     | :heavy_check_mark: |        :x:         |        :x:         |        :x:         |        :x:         |        :x:         |        :x:         |
-| Klicky-screws-tilt-calculate.cfg |        :x:         | :heavy_check_mark: | :heavy_check_mark: |        :x:         | :heavy_check_mark: | :heavy_check_mark: |  :grey_question:   |
-| klicky-z-tilt-adjust.cfg         |        :x:         | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |        :x:         |        :x:         | :heavy_check_mark: |
+| File                             |        v2.4        |        v1.8        |       Legacy       |      Trident       |         v0         |       Tiny-M       |      V-core3       | MercuryOne         |
+| -------------------------------- | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: | ------------------ |
+| klicky-probe.cfg                 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| klick-variables.cfg              | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| klicky-bed-mesh-calibrate.cfg    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| Klicky-quad-gantry-level.cfg     | :heavy_check_mark: |        :x:         |        :x:         |        :x:         |        :x:         |        :x:         |        :x:         | :x:                |
+| Klicky-screws-tilt-calculate.cfg |        :x:         | :heavy_check_mark: | :heavy_check_mark: |        :x:         | :heavy_check_mark: | :heavy_check_mark: |        :x:         | :grey_question:    |
+| klicky-z-tilt-adjust.cfg         |        :x:         | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |        :x:         |        :x:         | :heavy_check_mark: | :heavy_check_mark: |
 
 
 
@@ -67,8 +67,7 @@ Download the appropriate files (or the zip containing them all and delete the on
 ```
 cd ~/klipper_config/
 wget https://raw.githubusercontent.com/jlas1/Klicky-Probe/main/Klipper_macros/Klipper_macros.zip
-unzip klipper_macros.zip
-
+unzip Klipper_macros.zip
 ```
 
 Check the klicky-probe.cfg, remove or comment the macros that are not required for your printer or that you do not want to implement.
@@ -78,7 +77,7 @@ There are some configurations that need to be checked, otherwise your will run i
 
 Open your printer.cfg file, comment out *safe_z_home* or *homing_override*, if you have them (the macros will take care of homing) and add the following line before the "Macros" Section.
 
-`[include Klicky-Probe.cfg]`
+`[include klicky-probe.cfg]`
 
 It should look like this:
 
@@ -86,7 +85,7 @@ It should look like this:
 #####################################################################
 # 	Macros
 #####################################################################
-[include Klicky-Probe.cfg]
+[include klicky-probe.cfg]
 ```
 
 You now need to configure the probe pin, that is printer specific, and the details are on your printer configuration guide.
@@ -99,6 +98,16 @@ If however you would like to reduce the times that the toolhead attaches and doc
 
 When you don't need the probe attached anymore, run Dock_Probe_Unlock to dock and unlock the probe.
 
+## Pre and Post macros for dock operations
+
+If your setup requires a custom move, a macro to be called before attaching and docking, there are two macros \_DeployDock and \_RetractDock that are executed (if they are configured) when it's required for the dock to be ready for docking and attachment operations.
+
+## XY Sensorless homing 
+
+If you are using sensorless homing, and have your own X and/or Y homing macros, you can use override the klicky macros behavior with your very own _HOME_X and _HOME_Y macros.
+
+If they exist on your klipper configuration, klicky macro will use them instead of the default G28 commands.
+
 ## Advanced users
 
 **Beware going forward, you will leave the safety that the macros provide**
@@ -109,8 +118,9 @@ I recognize that some users are very technical and may want to write custom macr
 
 ```python
 # Probe entry location
-G0 X{docklocation_x|int - attachmove_x|int} Y{docklocation_y|int - attachmove_y|int} F{travel_feedrate}
+G0 X{docklocation_x|int - attachmove_x|int - attachmove2_x|int} Y{docklocation_y|int - attachmove_y|int - attachmove2_y} F{travel_feedrate}
 # Attach probe
+G0 X{docklocation_x|int - attachmove2_x|int} Y{docklocation_y|int - attachmove2_y} F{travel_feedrate}
 G0 X{docklocation_x} Y{docklocation_y} F{dock_feedrate}
 # Probe exit location
 G0 X{docklocation_x|int - attachmove_x|int} Y{docklocation_y|int - attachmove_y|int} F{release_feedrate}
@@ -125,6 +135,7 @@ G0 X{docklocation_x|int - attachmove_x|int} Y{docklocation_y|int - attachmove_y|
 G0 X{docklocation_x} Y{docklocation_y} F{dock_feedrate}
 # Probe decoupling
 G0 X{docklocation_x|int + dockmove_x|int} Y{docklocation_y|int + dockmove_y|int} F{release_feedrate}
+G0 X{docklocation_x|int + dockmove_x|int - attachmove_x|int} Y{docklocation_y|int + dockmove_y|int - attachmove_y|int} F{release_feedrate}
 ```
 
 The typical variables values are:
@@ -142,5 +153,9 @@ Variable_dockmove_z:              0    # (can be negative)
 Variable_attachmove_x:          30    # Final toolhead movement to Dock
 Variable_attachmove_y:            0    # the probe on the dock
 Variable_attachmove_z:            0    # (can be negative)
+
+Variable_attachmove2_x:          0    # intermediate toolhead movement to attach
+Variable_attachmove2_y:          0    # the probe on the dock (can be negative)
+Variable_attachmove2_z:          0    # (to be used as a last move before attaching the probe, suitable for Euclid)
 
 **Again, be advised that these will not raize the bed to avoid hitting it, won't check if the probe is docked or attached. USE EXTREME CAUTION**
